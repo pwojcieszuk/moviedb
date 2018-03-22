@@ -28,6 +28,7 @@ services:
         - .:/usr/src/movie-db/
       links:
         - mongodb
+      command: nodemon server.js
 
 volumes:
   mongo:

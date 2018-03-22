@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  mongodb-test:
+        image: mongo:latest
+        container_name: "mongodb-test"
+        environment:
+          - MONGO_DATA_DIR=mongo:/data/db
+          - MONGO_LOG_DIR=/dev/null
+          - MONGO
+        volumes:
+          - mongo:/data/db
+        ports:
+            - 27018:27018
+        command: mongod --port 2018 --smallfiles --logpath=/dev/null # --quiet
+
+  api-test:
+      container_name: moviedb-test
+      build: .
+      ports:
+        - "3001:3001" # Expose API port
+      environment:
+       - NODE_ENV=testing
+       - PORT=3001
+       - MONGO_URL=mongodb://mongodb:27017/testDb
+      volumes:
+        - .:/usr/src/movie-db/
+      links:
+        - mongodb-test
+      command: mocha -w
+
+volumes:
+  mongo:

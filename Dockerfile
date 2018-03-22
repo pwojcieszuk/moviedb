@@ -10,7 +10,7 @@ COPY ["package.json", "./"]
 
 RUN yarn
 
-RUN yarn global add nodemon
+RUN yarn global add nodemon mocha
 
 ENV NODE_ENV production
 
@@ -19,5 +19,3 @@ RUN cd /usr/src/movie-db
 COPY . .
 
 EXPOSE 3000
-
-CMD ["nodemon", "server.js"]
