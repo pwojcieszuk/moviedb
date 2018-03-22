@@ -1,19 +1,14 @@
 'use strict'
 
 const express = require('express');
-let mongoose = require('mongoose');
-let Movie = require('../models/movie');
+const getAllMovies = require('../data-handlers/movies-get-all');
 
 const router = express.Router();
 
 router.post('/', (req, res) => res.json({"movies": "todo"}));
 
 router.get('/', (req, res) => {
-    let query = Movie.find();
-    query.exec((err, movies) => {
-        err ? res.send(err) : res.json({"movies": movies});
-    });
-    
+    getAllMovies(res);
 });
 
 module.exports = router;
