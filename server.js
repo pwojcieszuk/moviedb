@@ -1,6 +1,7 @@
 'use strict'
 
 const express = require('express');
+const db = require('./connect');
 const router = require('./router');
 
 const app = express();

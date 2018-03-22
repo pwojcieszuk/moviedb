@@ -12,7 +12,7 @@ services:
           - mongo:/data/db
         ports:
             - 27018:27018
-        command: mongod --port 2018 --smallfiles --logpath=/dev/null # --quiet
+        command: mongod --port 27018 --smallfiles --logpath=/dev/null # --quiet
 
   api-test:
       container_name: moviedb-test
@@ -22,7 +22,7 @@ services:
       environment:
        - NODE_ENV=testing
        - PORT=3001
-       - MONGO_URL=mongodb://mongodb:27017/testDb
+       - MONGO_URL=mongodb://mongodb-test:27018/testDb
       volumes:
         - .:/usr/src/movie-db/
       links:
