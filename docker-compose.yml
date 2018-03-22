@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  mongodb:
+        image: mongo:latest
+        container_name: "mongodb"
+        environment:
+          - MONGO_DATA_DIR=mongo:/data/db
+          - MONGO_LOG_DIR=/dev/null
+          - MONGO
+        volumes:
+          - mongo:/data/db
+        ports:
+            - 27017:27017
+        command: mongod --smallfiles --logpath=/dev/null # --quiet
+
+  api:
+      container_name: moviedb
+      build: .
+      ports:
+        - "3000:3000" # Expose API port
+        - "9229:9229" # Expose Node process debug port (disable in production)
+      environment:
+       - NODE_ENV=local
+       - PORT=3000
+       - MONGO_URL=mongodb://mongodb:27017/movieDb
+      volumes:
+        - .:/usr/src/movie-db/
+      links:
+        - mongodb
+
+volumes:
+  mongo:
