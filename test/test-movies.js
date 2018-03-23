@@ -70,6 +70,53 @@ describe('movies', () => {
                 done();
             });
         });
+    });
 
+    describe('On /movies POST', () => {
+
+        it ('returns ok status', done => {
+            chai.request(server)
+            .post('/movies')
+            .end((err, res) => {
+                res.should.have.status(200);
+                done();
+            });
+        });
+
+        it ('returns json', done => {
+            chai.request(server)
+            .post('/movies')
+            .end((err, res) => {
+                res.should.be.json;
+                done();
+            });
+        });
+
+        it ('contacts external api', done => {
+            chai.request(server)
+            .post('/movies')
+            .end((err, res) => {
+                //todo
+                done();
+            });
+        });
+
+        it ('returns full movie object with data from external api', done => {
+            chai.request(server)
+            .post('/movies')
+            .end((err, res) => {
+                //todo
+                done();
+            });
+        });
+
+        it ('returns proper response if title not found in external api', done => {
+            chai.request(server)
+            .post('/movies')
+            .end((err, res) => {
+                //todo
+                done();
+            });
+        });
     });
 });
