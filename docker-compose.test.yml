@@ -27,7 +27,7 @@ services:
         - .:/usr/src/movie-db/
       links:
         - mongodb-test
-      command: mocha -w
+      command: mocha
 
 volumes:
   mongo:
