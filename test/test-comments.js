@@ -25,15 +25,22 @@ describe('comments', () => {
     });
 
     describe('On /comments GET', () => {
-        const testMovies = [{"Title": "Movie1"}, {"Title": "Movie2"}];
+        const testMovies = [{"Title": "Movie1"}, {"Title": "Movie11"}, {"Title": "Movie2"}];
+        let persistedTestMovies;
         const testComments = [];
+        
         beforeEach(done => {
             Movie.insertMany(testMovies)
             .then(movies => {
+                persistedTestMovies = [];
+
                 for (let movie of movies) {
                     for (let i=0; i<2; i++)
                         testComments.push({"Text": testUtils.randomStr(), "MovieId": '' + movie._id});
+
+                    persistedTestMovies.push(movie);
                 }
+
                 Comment.insertMany(testComments)
                 .then(() => done());
             })
@@ -50,19 +57,46 @@ describe('comments', () => {
                 res.should.have.status(200);
                 res.should.be.json;
 
-                const  parsedRes = res.body.comments.map(testUtils.parseMongoDoc)
+                const  parsedRes = res.body.comments.map(testUtils.parseMongoDoc);
                 parsedRes.should.eql(testComments);
                 done();
             });
         });
 
-        // it ('allows filtering of comments by movie id', done => {
-        //     done();
-        // });
+        it ('allows filtering of comments by movie id', done => {
+            const MovieId = testComments[0].MovieId;
+            chai.request(server)
+            .get('/comments')
+            .query({MovieId: MovieId})
+            .end((err, res) => {
+                res.should.have.status(200);
+                const  parsedRes = res.body.comments.map(testUtils.parseMongoDoc);
+                parsedRes.should.eql(testComments.filter(comment => comment.MovieId === MovieId));
+                done();
+            });
+        });
 
-        // it ('allows filtering of comments by movie name', done => {
-        //     done();
-        // });
+        it ('allows filtering of comments by movie name', done => {
+            const Title = "Movie1";
+            chai.request(server)
+            .get('/comments')
+            .query({Title: Title})
+            .end((err, res) => {
+                res.should.have.status(200);
+
+                const  parsedRes = res.body.comments.map(testUtils.parseMongoDoc);
+                
+                const movieIds = persistedTestMovies.reduce((acc, movie) => {
+                        if (movie.Title.indexOf(Title) !== -1) acc.push('' + movie._id);
+                        return acc;
+                }, []);
+
+                const commentsForMoviesMatchingTitles = testComments.filter(comment => movieIds.indexOf(comment.MovieId) !== -1);
+
+                parsedRes.should.eql(commentsForMoviesMatchingTitles);
+                done();
+            });
+        });
     });
 
     describe('On /comments POST', () => {
