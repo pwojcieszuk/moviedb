@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const mongoose = require('mongoose');
 
@@ -9,7 +9,7 @@ mongoose.connect(mongoUrl);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
-  console.log("MongoDB connected on " + mongoUrl);
+    console.log('MongoDB connected on ' + mongoUrl);
 });
 
 module.exports = db;

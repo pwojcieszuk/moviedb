@@ -4,6 +4,6 @@ const testUtils = {
     parseMongoDoc: doc => JSON.parse(JSON.stringify(doc, (key, value) => {
         return (key === '_id' | key === '__v' | key === 'createdAt' | key === 'updatedAt') ? undefined : value;
     }))
-}
+};
 
 module.exports = testUtils;

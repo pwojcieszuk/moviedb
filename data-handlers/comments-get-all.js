@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const Comment = require('../models/comment');
 const Movie = require('../models/movie');
@@ -11,22 +11,22 @@ module.exports = (req, res) => {
     if (MovieId) searchCriteria['MovieId'] = MovieId;
 
     Promise.resolve(searchCriteria)
-    .then(searchCriteria => {
+        .then(searchCriteria => {
 
-        if (! Title) return searchCriteria;
+            if (! Title) return searchCriteria;
 
-        return Movie.find({'Title': {'$regex': Title, '$options': 'i'}})
-            .then(movies => {
-                const movieIds = movies ? movies.map(movie => '' + movie._id) : [];
-                searchCriteria['MovieId'] = { '$in': movieIds };
-                return searchCriteria;
+            return Movie.find({'Title': {'$regex': Title, '$options': 'i'}})
+                .then(movies => {
+                    const movieIds = movies ? movies.map(movie => '' + movie._id) : [];
+                    searchCriteria['MovieId'] = { '$in': movieIds };
+                    return searchCriteria;
+                });
+        })
+        .then(searchCriteria => {
+            const query = Comment.find(searchCriteria);
+            query.exec((err, comments) => {
+                err ? res.send(err) : res.json({'comments': comments});
             });
-    })
-    .then(searchCriteria => {
-        const query = Comment.find(searchCriteria);
-        query.exec((err, comments) => {
-            err ? res.send(err) : res.json({"comments": comments});
-        });
-    })
-    .catch(err => { throw err; })
+        })
+        .catch(err => { throw err; });
 };

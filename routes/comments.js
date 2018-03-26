@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const express = require('express');
 const getAllComments = require('../data-handlers/comments-get-all');
