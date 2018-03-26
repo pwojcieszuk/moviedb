@@ -22,7 +22,7 @@ services:
       environment:
        - NODE_ENV=testing
        - PORT=3001
-       - MONGO_URI=mongodb://mongodb-test:27018/testDb
+       - MONGODB_URI=mongodb://mongodb-test:27018/testDb
       volumes:
         - .:/usr/src/movie-db/
       links:
