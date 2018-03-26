@@ -12,6 +12,7 @@ const Movie = require('../models/movie');
 const mockMovieToStore = require('./mock-data/movie.json');
 const mockMovieNotStored = require('./mock-data/movie2.json');
 const fetchMovie = require('../data-handlers/movies-fetch-from-external');
+const testUtils = require('./utils');
 
 chai.use(chaiHttp);
 chai.use(sinonChai);
@@ -62,11 +63,9 @@ describe('movies', () => {
                 .end((err, res) => {
                     res.body.movies.length.should.not.be.equal(0);
 
-                    let parsedRes = JSON.parse(JSON.stringify(res.body.movies[0], (key, value) => {
-                        return (key === '_id' | key === '__v') ? undefined : value;
-                    }));
+                    const parsedRes = testUtils.parseMongoDoc(res.body.movies[0]);
 
-                    let persistedData = Object.assign({}, mockMovieToStore);
+                    const persistedData = Object.assign({}, mockMovieToStore);
                     delete persistedData.Response;
                     
                     parsedRes.should.be.eql(persistedData);
@@ -125,11 +124,8 @@ describe('movies', () => {
                 .post('/movies')
                 .send({'title': mockMovieToStore.Title})
                 .end((err, res) => {
-                    let parsedRes = JSON.parse(JSON.stringify(res.body, (key, value) => {
-                        return (key === '_id' | key === '__v') ? undefined : value;
-                    }));
-
-                    let persistedData = Object.assign({}, mockMovieToStore);
+                    const parsedRes = testUtils.parseMongoDoc(res.body);
+                    const persistedData = Object.assign({}, mockMovieToStore);
                     delete persistedData.Response;
                     
                     parsedRes.should.be.eql(persistedData);
@@ -159,11 +155,9 @@ describe('movies', () => {
             .post('/movies')
             .send({'title': 'Blade Runner'})
             .end((err, res) => {
-                let parsedRes = JSON.parse(JSON.stringify(res.body, (key, value) => {
-                    return (key === '_id' | key === '__v') ? undefined : value;
-                }));
+                const parsedRes = testUtils.parseMongoDoc(res.body);
 
-                let obtainedData = Object.assign({}, mockMovieNotStored);
+                const obtainedData = Object.assign({}, mockMovieNotStored);
                 delete obtainedData.Response;
 
                 parsedRes.should.be.eql(obtainedData);
@@ -177,7 +171,7 @@ describe('movies', () => {
             .post('/movies')
             .send({'title': 'Blade Runner'})
             .end((err, res) => {
-                let dbPersisted = Movie.findOne({'Title': 'Blade Runner'}).exec()
+                const dbPersisted = Movie.findOne({'Title': 'Blade Runner'}).exec()
                     .then(movie => {
                         movie.should.not.be.null;
                         done();

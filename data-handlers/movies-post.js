@@ -9,7 +9,7 @@ const handleRes = (req, res) => {
     if (! req.is('json'))
         return res.status(400).json({"error": "Content-type should be application/json."});
 
-    let title = req.body.title || false;
+    const title = req.body.title || false;
 
     if (! title) return res.status(400).json({"error": "Title not provided."});
     
@@ -19,9 +19,7 @@ const handleRes = (req, res) => {
     prepareFindOneQuery(title).exec()
         .then(movie => movie || fetchMovie.fetch(title))
         .then(movie => movie["Response"] === "False" ? res.status(204).json() : res.json(movie))
-        .catch(err => {
-            res.send(err);
-        });
+        .catch(err => res.send(err));
 };
 
 module.exports = (req, res) => handleRes(req, res);

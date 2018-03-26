@@ -12,7 +12,7 @@ const fetchMovie = title => {
     const resp = new Promise((resolve, reject) => {
         axios.get(apiUrl, {"params": { "apikey": apiKey, "t": title}})
         .then(resp => {
-            let movie = resp.data;
+            const movie = resp.data;
 
             if (movie["Response"] === "False") return movie;
 
@@ -20,9 +20,7 @@ const fetchMovie = title => {
             return prepareUpsertQuery(title, movie).exec();
         })
         .then(movie => resolve(movie))
-        .catch(err => {
-            reject(err);
-        });
+        .catch(err => reject(err));
     });
 
     return resp;
