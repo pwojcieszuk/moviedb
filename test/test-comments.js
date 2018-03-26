@@ -148,10 +148,10 @@ describe('comments', () => {
             });
         });
 
-        it ('returns 400 and error message if no movie with provided id or title exists', done => {
+        it ('returns 400 and error message if no movie with provided id or Title exists', done => {
             chai.request(server)
             .post('/comments')
-            .send({"Title": "Non existent title"})
+            .send({"Title": "Non existent Title"})
             .end((err, res) => {
                 res.should.have.status(400);
                 res.body.should.have.keys(['error']);

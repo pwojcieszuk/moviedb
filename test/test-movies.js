@@ -79,14 +79,14 @@ describe('movies', () => {
         it ('returns 204 status if film not found', done => {
             chai.request(server)
             .post('/movies')
-            .send({'title': 'some title'})
+            .send({'Title': 'some Title'})
             .end((err, res) => {
                 res.should.have.status(204);
                 done();
             });
         });
 
-        it ('returns bad request if title is not provided in request', done => {
+        it ('returns bad request if Title is not provided in request', done => {
             chai.request(server)
             .post('/movies')
             .end((err, res) => {
@@ -96,17 +96,17 @@ describe('movies', () => {
             });
         });
 
-        it ('returns bad request if title provided in request is not a value that can be automatically stringified', done => {
+        it ('returns bad request if Title provided in request is not a value that can be automatically stringified', done => {
             chai.request(server)
             .post('/movies')
-            .send({'title': {'a': 'b'}})
+            .send({'Title': {'a': 'b'}})
             .end((err, res) => {
                 res.should.have.status(400);
                 res.body.should.have.keys(['error']);
             });
             chai.request(server)
             .post('/movies')
-            .send({'title': [1,2,3]})
+            .send({'Title': [1,2,3]})
             .end((err, res) => {
                 res.should.have.status(400);
                 res.body.should.have.keys(['error']);
@@ -122,7 +122,7 @@ describe('movies', () => {
 
                 chai.request(server)
                 .post('/movies')
-                .send({'title': mockMovieToStore.Title})
+                .send({'Title': mockMovieToStore.Title})
                 .end((err, res) => {
                     const parsedRes = testUtils.parseMongoDoc(res.body);
                     const persistedData = Object.assign({}, mockMovieToStore);
@@ -141,7 +141,7 @@ describe('movies', () => {
             sinon.stub(fetchMovie, 'fetch').resolves(mockMovieNotStored);
             chai.request(server)
             .post('/movies')
-            .send({'title': 'sdsa'})
+            .send({'Title': 'sdsa'})
             .end((err, res) => {
                 fetchMovie.fetch.should.have.been.calledOnce
                 fetchMovie.fetch.restore();
@@ -153,7 +153,7 @@ describe('movies', () => {
             sinon.spy(fetchMovie, 'fetch')
             chai.request(server)
             .post('/movies')
-            .send({'title': 'Blade Runner'})
+            .send({'Title': 'Blade Runner'})
             .end((err, res) => {
                 const parsedRes = testUtils.parseMongoDoc(res.body);
 
@@ -169,7 +169,7 @@ describe('movies', () => {
         it ('persists movie data in local database', done => {
             chai.request(server)
             .post('/movies')
-            .send({'title': 'Blade Runner'})
+            .send({'Title': 'Blade Runner'})
             .end((err, res) => {
                 const dbPersisted = Movie.findOne({'Title': 'Blade Runner'}).exec()
                     .then(movie => {
