@@ -13,6 +13,8 @@ RUN yarn
 RUN yarn global add nodemon mocha
 
 ENV NODE_ENV production
+ENV EXTERNAL_MOVIE_API_URI=http://www.omdbapi.com/
+ENV EXTERNAL_MOVIE_API_KEY=7eb6710a 
 
 RUN cd /usr/src/movie-db
 

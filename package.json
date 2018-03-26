@@ -20,7 +20,8 @@
     "sinon-chai": "^3.0.0"
   },
   "scripts": {
-    "test-dev": "PORT=3001 mocha -w",
-    "test": "PORT=3001 mocha"
+    "test-dev": "mocha -w",
+    "test": "mocha --exit",
+    "start": "nodemon server.js"
   }
 }

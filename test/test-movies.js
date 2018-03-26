@@ -79,7 +79,7 @@ describe('movies', () => {
         it ('returns 204 status if film not found', done => {
             chai.request(server)
                 .post('/movies')
-                .send({'Title': 'some Title'})
+                .send({'Title': 'some title'})
                 .end((err, res) => {
                     res.should.have.status(204);
                     done();

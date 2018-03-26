@@ -3,8 +3,8 @@
 const Movie = require('../models/movie');
 const axios = require('axios');
 
-const apiUrl = 'http://www.omdbapi.com/';
-const apiKey='7eb6710a';
+const apiUrl = process.env.EXTERNAL_MOVIE_API_URI;
+const apiKey = process.env.EXTERNAL_MOVIE_API_KEY;
 
 const prepareUpsertQuery = (Title, movie) => Movie.findOneAndUpdate({'Title': Title}, movie, {'upsert': true, 'new': true});
 
