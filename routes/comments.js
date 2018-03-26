@@ -1,11 +1,13 @@
 'use strict'
 
 const express = require('express');
+const getAllComments = require('../data-handlers/comments-get-all');
+const postComment = require('../data-handlers/comments-post');
 
 const router = express.Router();
 
-router.post('/', (req, res) => res.json({"comments": "todo"}));
+router.post('/', (req, res) => postComment(req, res));
 
-router.get('/', (req, res) => res.json({"comments": "todo"}));
+router.get('/', (req, res) => getAllComments(req, res));
 
 module.exports = router;
